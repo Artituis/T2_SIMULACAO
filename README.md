@@ -9,11 +9,13 @@ Compra de lanches: O quiosque de lanches é atendido por dois funcionários e a 
 Controle de entrada: A última fila é destinada ao controle de entrada para as salas do cinema.
 O atendimento é realizado por um funcionário, a fila comporta até oito pessoas, e cada atendimento leva de 3 a 4 minutos. Após a validação dos ingressos: 90% dos clientes seguem para as salas do cinema e 10% retornam à bilheteria.
 
+📄 [Modelo da Simulação](./docs/simulacao_cinema.pdf)
+
 ## Simulação
 
 A simulação para a primeira análise foi definida com a utilização de 100.000 números pseudoaleatórios e semente com valor “123”. O primeiro cliente está agendado para chegar ao cinema no tempo 2,0 minutos. 
 
-## Análise Situação Inicial
+### Análise Situação Inicial
 
 Fila: F1
 Atendimento: 2 ... 3
@@ -94,7 +96,7 @@ Tempo Total: 38677.40463613602
 
 O tempo total de simulação foi de 38.677 minutos, aproximadamente 645 horas (cerca de 27 dias).
 
-## Análise Proposta 1
+### Análise Proposta 1
 
 Na primeira simulação, observamos que o principal gargalo no atendimento ao cliente está na lanchonete. Para esta nova simulação, foi adicionado mais um atendente nesse setor, com o objetivo de observar como esse ajuste afeta o desempenho do sistema.
 
@@ -180,7 +182,7 @@ Para a próxima proposta, será necessário considerar a adição de mais um fun
 Além disso, mesmo com a melhoria apresentada na fila 2, ainda se observa um número considerável de perdas. Portanto, recomenda-se também a adição de um segundo funcionário extra na fila 2, visando minimizar ainda mais esse impacto e garantir maior eficiência no atendimento.
 
 
-## Análise Proposta 2
+### Análise Proposta 2
 
 Fila: F1
 Atendimento: 2 ... 3
