@@ -1,0 +1,41 @@
+rndnumbers_per_seed: 100000
+seeds: 123
+arrival: 2.0
+
+queues:
+  F1:
+    servers: 1
+    capacity: 10000000
+    min_arrival: 2
+    max_arrival: 4
+    min_service: 1
+    max_service: 2
+  F2:
+    servers: 2
+    capacity: 5
+    min_service: 4
+    max_service: 8
+  F3:
+    servers: 2
+    capacity: 10
+    min_service: 5
+    max_service: 15
+
+network:
+  - source: F1
+    target: F2
+    probability: 0.8
+  - source: F1
+    target: F3
+    probability: 0.2
+  - source: F2
+    target: F1
+    probability: 0.3
+  - source: F2
+    target: F2
+    probability: 0.5
+  - source: F3
+    target: F3
+    probability: 0.7
+
+
