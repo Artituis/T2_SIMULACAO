@@ -9,7 +9,7 @@ Compra de lanches: O quiosque de lanches é atendido por dois funcionários e a 
 Controle de entrada: A última fila é destinada ao controle de entrada para as salas do cinema.
 O atendimento é realizado por um funcionário, a fila comporta até oito pessoas, e cada atendimento leva de 3 a 4 minutos. Após a validação dos ingressos: 90% dos clientes seguem para as salas do cinema e 10% retornam à bilheteria.
 
-📄 [Modelo da Simulação](./docs/simulacao_cinema.pdf)
+![Modelo](./docs/simulacao_cinemaPNG.png)
 
 ## Simulação
 
