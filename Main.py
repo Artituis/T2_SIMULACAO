@@ -192,42 +192,48 @@ if __name__ == "__main__":
         with open(path, 'r') as f:
             data = yaml.safe_load(f)
 
-            # Conversão explícita dos dados para as dataclasses
-            queues = {k: QueueConfig(**v) for k, v in data["queues"].items()}
+            
+            arrival_dict = data.get("arrivals", {})
+            arrival_queue_name = next(iter(arrival_dict))
+            arrival_time = arrival_dict[arrival_queue_name]
+
+            queues = {k: QueueConfig(
+                servers=v["servers"],
+                capacity=v.get("capacity", -1),
+                min_arrival=v.get("minArrival"),
+                max_arrival=v.get("maxArrival"),
+                min_service=v["minService"],
+                max_service=v["maxService"]
+            ) for k, v in data["queues"].items()}
+
             network = [Network(**n) for n in data["network"]]
-            config = Config(
-                rndnumbers_per_seed=data["rndnumbers_per_seed"],
-                seeds=data["seeds"],
-                arrival=data["arrival"],
-                queues=queues,
-                network=network
-            )
+
+            seeds = data.get("seeds", [])
+            rndnumbers_per_seed = data.get("rndnumbersPerSeed", 0)
+            rndnumbers = data.get("rndnumbers", [])
 
     except Exception as e:
         print(f"Erro ao carregar o arquivo: {e}")
         exit(1)
 
-    filas = [
-        create_queue("F1", config.queues["F1"]),
-        create_queue("F2", config.queues["F2"]),
-        create_queue("F3", config.queues["F3"])
-    ]
+    filas = [create_queue(q_id, queues[q_id]) for q_id in queues]
 
-    for net in config.network:
+    for net in network:
         add_network(filas, net.source, net.target, net.probability)
 
-    primeira_chegada = [config.queues["F1"].min_arrival, config.queues["F1"].max_arrival]
-    sim = RoutingSimulator(filas, primeira_chegada, config.arrival, config.rndnumbers_per_seed, config.seeds)
+    arrival_queue = next((f for f in filas if f.id == arrival_queue_name), None)
+    primeira_chegada = [arrival_queue.inicio_atendimento, arrival_queue.fim_atendimento]
+
+    if rndnumbers:
+        sim = RoutingSimulator(filas, primeira_chegada, arrival_time, len(rndnumbers), 0)
+        sim.aleatorios = rndnumbers.copy()
+    else:
+        sim = RoutingSimulator(filas, primeira_chegada, arrival_time, rndnumbers_per_seed, seeds[0])
     sim.run()
 
     resultados = []
-    descricao_filas = [
-        "G/G/1, chegadas entre 2..4, atendimento entre 1..2",
-        "G/G/2/5, atendimento entre 4..8",
-        "G/G/2/10, atendimento entre 5..15"
-    ]
-
-    for idx, (q, desc) in enumerate(zip(filas, descricao_filas), start=1):
+    for idx, q in enumerate(filas, start=1):
+        desc = f"G/G/{q.servidores}/{q.capacidade if q.capacidade != -1 else '∞'}, atendimento entre {q.inicio_atendimento}..{q.fim_atendimento}"
         pop = calcular_populacao(q)
         vazao = calcular_vazao(q)
         util = calcular_utilizacao(q)
